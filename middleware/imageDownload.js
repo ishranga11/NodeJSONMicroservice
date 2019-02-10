@@ -25,12 +25,6 @@ module.exports = (req,res,next) => {
                     });
                     next();
                 })
-                .catch((err) => {
-                    res.status(403);
-                    res.json({
-						messsage : err
-					});
-                })
             })
     } else {
         res.status(403);

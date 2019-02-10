@@ -24,11 +24,11 @@ app.get('/api',(req,res) => {
   })
 });
 
-app.post('/api/posts', verifyToken, (req,res) => {
-  res.json({
-      out: req.userId
-  });
-});
+// app.post('/api/posts', verifyToken, (req,res) => {
+//   res.json({
+//       out: req.userId
+//   });
+// });
 
 app.post('/api/jsonpatch', verifyToken, (req,res) => {
     jsonpatch.apply(req.body.jsonObject,req.body.jsonPatch);
@@ -50,11 +50,6 @@ app.post('/api/login', (req,res) => {
         token
     });
   });
-});
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
 });
 
 app.listen(6000, ()=> console.log('Server running on port 5000'));
