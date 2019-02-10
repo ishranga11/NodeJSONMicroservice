@@ -1,7 +1,7 @@
 const download = require('image-downloader');
 const path = require('path');
 const fs = require('fs');
-var resizeImg = require('resize-img');
+const resizeImg = require('resize-img');
 
 module.exports = (req,res,next) => {
     let ext = path.extname(req.body.url);
@@ -11,24 +11,29 @@ module.exports = (req,res,next) => {
     };
     if(ext === '.jpeg' || ext === '.jpg' || ext ==='.png' || ext === '.bmp' ) {
         download.image(options)
-            .then(({ filename, image }) => {
+            .then(({ filename }) => {
                 resizeImg(
                     fs.readFileSync(filename),
                     {width: 50, height: 50}
                 ).then(buf => {
-                    fs.writeFileSync("./public/images/thumbnails/new1.png", buf);
-                    var image = fs.readFileSync(buf);
-                    res.setHeader('content-Type', 'image/png');
-                    res.end(image);
+                    let fName = filename.split("\\");
+                    let finalName = fName.pop();
+                    console.log(finalName);
+                    fs.writeFileSync("./public/images/thumbnails/" + finalName, buf);
+                    res.json({
+                        message : "Successfully saved"
+                    });
                     next();
                 })
                 .catch((err) => {
+                    res.status(403);
                     res.json({
 						messsage : err
 					});
                 })
             })
     } else {
+        res.status(403);
         res.json ({
             Message : "Image extensions allowed -> jpg,jpeg,bmp,png"
         })

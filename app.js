@@ -10,10 +10,6 @@ var imageFunc = require('./middleware/imageDownload');
 var jsonpatch = require('json-patch');
 
 dotenv.config();
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var app = express();
 
 app.use(logger('dev'));
@@ -22,10 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-app.get('./api',(req,res) => {
+app.get('/api',(req,res) => {
   res.json({
       message: 'Welcome to the API'
   })
@@ -44,7 +37,8 @@ app.post('/api/jsonpatch', verifyToken, (req,res) => {
     });
 });
 
-app.post('/api/image', verifyToken, imageFunc );
+app.post('/api/image', verifyToken, imageFunc, (req,res) => {
+});
 
 app.post('/api/login', (req,res) => {
   const user = {
@@ -63,6 +57,6 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-app.listen(5000, ()=> console.log('Server running on port 5000'));
+app.listen(6000, ()=> console.log('Server running on port 5000'));
 
 module.exports = app;
